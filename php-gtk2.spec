@@ -5,7 +5,7 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.0
-Release:	%mkrel 1.%{snap}.5
+Release:	%mkrel 1.%{snap}.6
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
@@ -40,6 +40,16 @@ for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type 
 done
 
 %build
+export CFLAGS="%{optflags}"
+export CXXFLAGS="%{optflags}"
+export FFLAGS="%{optflags}"
+
+%if %mdkversion >= 200710
+export CFLAGS="$CFLAGS -fstack-protector"
+export CXXFLAGS="$CXXFLAGS -fstack-protector"
+export FFLAGS="$FFLAGS -fstack-protector"
+%endif
+
 ./buildconf
 
 %configure2_5x \
@@ -77,5 +87,3 @@ EOF
 %doc demos test AUTHORS ChangeLog NEWS README* TODO2
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-cli.d/*
 %{_libdir}/php/extensions/php_gtk2.so
-
-
