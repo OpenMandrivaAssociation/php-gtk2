@@ -1,15 +1,15 @@
-%define snap alpha
+%define snap beta
 
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.0
-Release:	%mkrel 1.%{snap}.6
+Release:	%mkrel 1.%{snap}.1
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
-Source0:	php-gtk-%{version}%{snap}.tar.bz2
+Source0:	php-gtk-%{version}%{snap}.tar.gz
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -40,15 +40,7 @@ for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type 
 done
 
 %build
-export CFLAGS="%{optflags}"
-export CXXFLAGS="%{optflags}"
-export FFLAGS="%{optflags}"
-
-%if %mdkversion >= 200710
-export CFLAGS="$CFLAGS -fstack-protector"
-export CXXFLAGS="$CXXFLAGS -fstack-protector"
-export FFLAGS="$FFLAGS -fstack-protector"
-%endif
+%serverbuild
 
 ./buildconf
 
