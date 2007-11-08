@@ -5,11 +5,12 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.0
-Release:	%mkrel 1.%{snap}.2
+Release:	%mkrel 1.%{snap}.3
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
 Source0:	php-gtk-%{version}%{snap}.tar.gz
+Patch0:		php-gtk-bug35406.diff
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -30,6 +31,7 @@ GUI applications.
 %prep
 
 %setup -q -n php-gtk-%{version}%{snap}
+%patch0 -p1
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
