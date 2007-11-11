@@ -5,7 +5,7 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.0
-Release:	%mkrel 1.%{snap}.3
+Release:	%mkrel 1.%{snap}.4
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
@@ -72,6 +72,18 @@ extension = php_gtk2.so
 ;php-gtk.extensions = 
 
 EOF
+
+%post
+if [ -f /var/lock/subsys/httpd ]; then
+    %{_initrddir}/httpd restart >/dev/null || :
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+    if [ -f /var/lock/subsys/httpd ]; then
+	%{_initrddir}/httpd restart >/dev/null || :
+    fi
+fi
 
 %clean
 [ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
