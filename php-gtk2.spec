@@ -20,6 +20,7 @@ BuildRequires:	php-cli >= 3:5.2.0
 BuildRequires:	chrpath
 Requires:	php-cli >= 3:5.2.0
 Epoch:		2
+BuildRoot:	%{_tmppath}/%{name}-buildroot
 
 %description
 PHP-GTK is an extension for PHP programming language that implements language
