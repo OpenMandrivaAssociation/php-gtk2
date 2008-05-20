@@ -1,15 +1,13 @@
-%define snap beta
-
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
-Version:	2.0.0
-Release:	%mkrel 1.%{snap}.5
+Version:	2.0.1
+Release:	%mkrel 1
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
-Source0:	php-gtk-%{version}%{snap}.tar.gz
+Source0:	http://gtk.php.net/distributions/php-gtk-%{version}.tar.gz
 Patch0:		php-gtk-bug35406.diff
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
@@ -17,10 +15,10 @@ BuildRequires:	gtk+2-devel >= 2.6.9
 BuildRequires:	libpango-devel >= 1.8.0
 #BuildRequires:	libglade2.0-devel >= 2.4.0
 BuildRequires:	php-cli >= 3:5.2.0
-BuildRequires:	chrpath
 Requires:	php-cli >= 3:5.2.0
+Conflicts:	apache-mod_php
 Epoch:		2
-BuildRoot:	%{_tmppath}/%{name}-buildroot
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 PHP-GTK is an extension for PHP programming language that implements language
@@ -30,7 +28,7 @@ GUI applications.
 
 %prep
 
-%setup -q -n php-gtk-%{version}%{snap}
+%setup -q -n php-gtk-%{version}
 %patch0 -p1
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
@@ -52,17 +50,15 @@ done
   
 make
 
-chrpath -d modules/php_gtk2.so
-
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
-install -d %{buildroot}%{_sysconfdir}/php-cli.d
+install -d %{buildroot}%{_sysconfdir}/php.d
 install -d %{buildroot}%{_libdir}/php/extensions
 
 install -m0755 modules/php_gtk2.so %{buildroot}%{_libdir}/php/extensions/
 
-cat > %{buildroot}%{_sysconfdir}/php-cli.d/60_php-gtk2.ini << EOF
+cat > %{buildroot}%{_sysconfdir}/php.d/60_php-gtk2.ini << EOF
 
 extension = php_gtk2.so
 
@@ -86,10 +82,10 @@ if [ "$1" = "0" ]; then
 fi
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
 %doc demos test AUTHORS ChangeLog NEWS README* TODO2
-%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php-cli.d/*
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*
 %{_libdir}/php/extensions/php_gtk2.so
