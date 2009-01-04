@@ -3,12 +3,13 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.1
-Release:	%mkrel 3
+Release:	%mkrel 4
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
 Source0:	http://gtk.php.net/distributions/php-gtk-%{version}.tar.gz
 Patch0:		php-gtk-bug35406.diff
+Patch1:		php-gtk-2.0.1-format_not_a_string_literal_and_no_format_arguments.diff
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -30,6 +31,7 @@ GUI applications.
 
 %setup -q -n php-gtk-%{version}
 %patch0 -p1
+%patch1 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
