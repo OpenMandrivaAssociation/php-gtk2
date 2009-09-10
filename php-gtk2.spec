@@ -3,7 +3,7 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.1
-Release:	%mkrel 8
+Release:	%mkrel 9
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
@@ -14,6 +14,7 @@ BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
 BuildRequires:	libpango-devel >= 1.8.0
+BuildRequires:	php-mbstring
 #BuildRequires:	libglade2.0-devel >= 2.4.0
 BuildRequires:	php-cli >= 3:5.2.0
 Requires:	php-cli >= 3:5.2.0
@@ -47,8 +48,8 @@ done
 ./buildconf
 
 %configure2_5x \
-    --with-libdir=%{_lib} \
-    --disable-libglade
+    --with-libdir=%{_lib}
+#    --disable-libglade
   
 make
 
