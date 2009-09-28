@@ -3,13 +3,15 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.1
-Release:	%mkrel 10
+Release:	%mkrel 11
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
 Source0:	http://gtk.php.net/distributions/php-gtk-%{version}.tar.gz
 Patch0:		php-gtk-bug35406.diff
 Patch1:		php-gtk-2.0.1-format_not_a_string_literal_and_no_format_arguments.diff
+# PHP5.3 fix, see http://bugs.php.net/bug.php?id=45839
+Patch2:		php-gtk-php53.patch
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -33,6 +35,7 @@ GUI applications.
 %setup -q -n php-gtk-%{version}
 %patch0 -p1
 %patch1 -p0
+%patch2 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
@@ -50,7 +53,22 @@ done
 %configure2_5x \
     --with-libdir=%{_lib}
 #    --disable-libglade
-  
+
+# We use our own libtool, and apply some fixes
+%{__rm} libtool
+ln -s %{_bindir}/libtool libtool
+
+sed -i.orig 's/compile $(CC)/compile --tag=CC $(CC)/g' Makefile
+sed -i.orig 's/link $(CC)/link --tag=CC $(CC)/g' Makefile
+
+# Simple fixes for the Zend framework since the ZEND functions are static in PHP5
+sed -i.orig 's/^static$//g' ext/gtk+/gen_atk.c
+sed -i.orig 's/^static$//g' ext/gtk+/gen_pango.c
+sed -i.orig 's/^static$//g' ext/gtk+/gen_gdk.c
+sed -i.orig 's/^static$//g' ext/gtk+/gen_gtk.c
+sed -i.orig 's/^static$//g' ext/libglade/gen_libglade.c
+sed -i.orig 's/^static$//g' main/phpg_gobject.c
+
 make
 
 %install
