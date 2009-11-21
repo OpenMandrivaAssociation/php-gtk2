@@ -3,7 +3,7 @@
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.1
-Release:	%mkrel 12
+Release:	%mkrel 13
 Group:		Development/PHP
 License:	LGPL
 URL:		http://gtk.php.net/
