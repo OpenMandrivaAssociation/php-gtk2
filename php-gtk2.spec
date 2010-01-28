@@ -16,6 +16,8 @@ Group:		Development/PHP
 License:	LGPLv2.1
 URL:		http://gtk.php.net/
 Source0:	http://gtk.php.net/distributions/php-gtk-%{version}-0.svn%{snapshot}.tar.gz
+Source1:	php_cairo_api.h
+Source2:	cairo_local_path.patch
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -47,14 +49,18 @@ for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type 
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
+
 %build
 %serverbuild
 
 ./buildconf
 
+# Bad fix, but like this we don't need to use a devel file for php-cairo, since for now this is only needed by php-gtk2 this is the clever way
+%{__cp} %{SOURCE1} .
+patch -p0 -i %{SOURCE2}
+
 %configure2_5x \
     --with-libdir=%{_lib}
-#    --disable-libglade
 
 # We use our own libtool, and apply some fixes
 %{__rm} libtool
