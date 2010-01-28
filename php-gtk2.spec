@@ -1,25 +1,30 @@
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
+%define snapshot 289364
+%define rel 1
+%if %snapshot
+%define release %mkrel 0.svn%snapshot.%rel
+%else
+%define release %mkrel %rel
+%endif
+
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.1
-Release:	%mkrel 14
+Release:	%release
 Group:		Development/PHP
-License:	LGPL
+License:	LGPLv2.1
 URL:		http://gtk.php.net/
-Source0:	http://gtk.php.net/distributions/php-gtk-%{version}.tar.gz
-Patch0:		php-gtk-bug35406.diff
-Patch1:		php-gtk-2.0.1-format_not_a_string_literal_and_no_format_arguments.diff
-# PHP5.3 fix, see http://bugs.php.net/bug.php?id=45839
-Patch2:		php-gtk-php53.patch
+Source0:	http://gtk.php.net/distributions/php-gtk-%{version}-0.svn%{snapshot}.tar.gz
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
 BuildRequires:	libpango-devel >= 1.8.0
 BuildRequires:	php-mbstring
-#BuildRequires:	libglade2.0-devel >= 2.4.0
-BuildRequires:	php-cli >= 3:5.2.0
-Requires:	php-cli >= 3:5.2.0
+BuildRequires:	libglade2.0-devel >= 2.4.0
+BuildRequires:	php-cairo
+BuildRequires:	php-cli >= 3:5.3.0
+Requires:	php-cli >= 3:5.3.0
 Conflicts:	apache-mod_php
 Epoch:		2
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -32,16 +37,13 @@ GUI applications.
 
 %prep
 
-%setup -q -n php-gtk-%{version}
-%patch0 -p1
-%patch1 -p0
-%patch2 -p0
+%setup -q -n php-gtk
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
 find . -type f -perm 0444 -exec chmod 644 {} \;
 		
-for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type f -name .#\*`; do
+for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type d -name .svn` `find . -type f -name .#\*`; do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
@@ -61,13 +63,12 @@ ln -s %{_bindir}/libtool libtool
 sed -i.orig 's/compile $(CC)/compile --tag=CC $(CC)/g' Makefile
 sed -i.orig 's/link $(CC)/link --tag=CC $(CC)/g' Makefile
 
-# Simple fixes for the Zend framework since the ZEND functions are static in PHP5
-sed -i.orig 's/^static$//g' ext/gtk+/gen_atk.c
-sed -i.orig 's/^static$//g' ext/gtk+/gen_pango.c
-sed -i.orig 's/^static$//g' ext/gtk+/gen_gdk.c
-sed -i.orig 's/^static$//g' ext/gtk+/gen_gtk.c
-sed -i.orig 's/^static$//g' ext/libglade/gen_libglade.c
-sed -i.orig 's/^static$//g' main/phpg_gobject.c
+# link some files in order to have enough gtk support for not released yet 2.19 gtk
+pushd ext/gtk+/
+ln -s gtk-2.18.defs gtk-2.19.defs
+ln -s gtk-2.18.overrides gtk-2.19.overrides
+ln -s gtk-2.18-types.defs gtk-2.19-types.defs
+popd
 
 make
 
