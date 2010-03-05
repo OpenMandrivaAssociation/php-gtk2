@@ -1,7 +1,7 @@
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
 %define snapshot 289364
-%define rel 1
+%define rel 2
 %if %snapshot
 %define release %mkrel 0.svn%snapshot.%rel
 %else
