@@ -18,6 +18,7 @@ URL:		http://gtk.php.net/
 Source0:	http://gtk.php.net/distributions/php-gtk-%{version}-0.svn%{snapshot}.tar.gz
 Source1:	php_cairo_api.h
 Source2:	cairo_local_path.patch
+Patch0:		php-gtk-2.0.2-make-3.8.patch
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -38,8 +39,8 @@ classes and functions and greatly simplifies writing client side cross-platform
 GUI applications.
 
 %prep
-
 %setup -q -n php-gtk
+%patch0 -p0
 
 find . -type d -perm 0700 -exec chmod 755 {} \;
 find . -type f -perm 0555 -exec chmod 755 {} \;
