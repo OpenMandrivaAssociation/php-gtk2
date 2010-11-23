@@ -1,7 +1,7 @@
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
-%define snapshot 289364
-%define rel 4
+%define snapshot 305683
+%define rel 1
 %if %snapshot
 %define release %mkrel 0.svn%snapshot.%rel
 %else
@@ -10,15 +10,15 @@
 
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
-Version:	2.0.2
+Version:	2.0.3
 Release:	%release
 Group:		Development/PHP
 License:	LGPLv2.1
 URL:		http://gtk.php.net/
-Source0:	http://gtk.php.net/distributions/php-gtk-%{version}-0.svn%{snapshot}.tar.gz
+Source0:	http://gtk.php.net/distributions/php-gtk2-%{version}-0.svn%{snapshot}.tar.gz
 Source1:	php_cairo_api.h
-Source2:	cairo_local_path.patch
 Patch0:		php-gtk-2.0.2-make-3.8.patch
+Patch1:		cairo_local_path.patch
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	glib2-devel >= 2.6.0
 BuildRequires:	gtk+2-devel >= 2.6.9
@@ -39,26 +39,21 @@ classes and functions and greatly simplifies writing client side cross-platform
 GUI applications.
 
 %prep
-%setup -q -n php-gtk
+%setup -q -n php-gtk2
 %patch0 -p0
+%patch1 -p0
 
-find . -type d -perm 0700 -exec chmod 755 {} \;
-find . -type f -perm 0555 -exec chmod 755 {} \;
-find . -type f -perm 0444 -exec chmod 644 {} \;
-		
-for i in `find . -type d -name CVS` `find . -type f -name .cvs\*` `find . -type d -name .svn` `find . -type f -name .#\*`; do
+cp %{SOURCE1} main/php_cairo_api.h
+
+for i in `find . -type d -name .svn`; do
     if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
 done
 
-
 %build
 %serverbuild
-
+rm -f configure
+rm -rf autom4te.cache
 ./buildconf
-
-# Bad fix, but like this we don't need to use a devel file for php-cairo, since for now this is only needed by php-gtk2 this is the clever way
-%{__cp} %{SOURCE1} .
-patch -p0 -i %{SOURCE2}
 
 %configure2_5x \
     --with-libdir=%{_lib}
