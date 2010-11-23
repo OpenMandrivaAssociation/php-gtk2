@@ -1,7 +1,7 @@
 %define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
 
 %define snapshot 305683
-%define rel 1
+%define rel 2
 %if %snapshot
 %define release %mkrel 0.svn%snapshot.%rel
 %else
@@ -82,8 +82,7 @@ install -d %{buildroot}%{_libdir}/php/extensions
 
 install -m0755 modules/php_gtk2.so %{buildroot}%{_libdir}/php/extensions/
 
-cat > %{buildroot}%{_sysconfdir}/php.d/60_php-gtk2.ini << EOF
-
+cat > %{buildroot}%{_sysconfdir}/php.d/A99_gtk2.ini << EOF
 extension = php_gtk2.so
 
 [php-gtk]
