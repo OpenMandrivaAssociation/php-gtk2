@@ -1,0 +1,12 @@
+--- ext/gtk+/config.m4	2010-01-05 14:17:36.000000000 +0100
++++ ext/gtk+/config.m4.oden	2010-11-23 09:51:01.691793647 +0100
+@@ -41,8 +41,7 @@
+ dnl AC_CHECK_HEADER ignored my CPPFLAGS/CFLAGS/CXXFLAGS/AM_CFLAGS/AM_CPPFLAGS/
+ dnl LDFLAGS/AM_LDFLAGS settings so i ignored it.
+ 	AC_MSG_CHECKING(for cairo php extension)
+-	if test -f "$phpincludedir/ext/cairo/php_cairo_api.h"; then
+-		PHP_ADD_INCLUDE($phpincludedir/ext/cairo)
++	if test -f "main/php_cairo_api.h"; then
+ 		PHP_DEF_HAVE(CAIRO)
+ 		AC_MSG_RESULT(yes)
+ 	else
