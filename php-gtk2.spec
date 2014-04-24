@@ -62,13 +62,6 @@ ln -s %{_bindir}/libtool libtool
 sed -i.orig 's/compile $(CC)/compile --tag=CC $(CC)/g' Makefile
 sed -i.orig 's/link $(CC)/link --tag=CC $(CC)/g' Makefile
 
-# link some files in order to have enough gtk support for not released yet 2.19 gtk
-pushd ext/gtk+/
-ln -s gtk-2.18.defs gtk-2.19.defs
-ln -s gtk-2.18.overrides gtk-2.19.overrides
-ln -s gtk-2.18-types.defs gtk-2.19-types.defs
-popd
-
 make
 
 %install
