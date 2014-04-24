@@ -42,7 +42,7 @@ GUI applications.
 %prep
 %setup -q -n php-gtk2
 %patch1 -p0
-%patch2 p1
+%patch2 -p1
 
 cp %{SOURCE1} main/php_cairo_api.h
 
