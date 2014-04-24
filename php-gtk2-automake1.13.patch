@@ -1,0 +1,12 @@
+diff -urN php-gtk2/build2/build2.mk php-gtk2-patched/build2/build2.mk
+--- php-gtk2/build2/build2.mk	2012-11-09 02:55:20.000000000 +1100
++++ php-gtk2-patched/build2/build2.mk	2013-09-17 21:14:47.539066659 +1100
+@@ -8,7 +8,7 @@
+ 
+ all: configure config.h.in
+ 
+-aclocal.m4: configure.in acinclude.m4
++aclocal.m4: acinclude.m4
+ 	@echo rebuilding $@
+ 	cat acinclude.m4 ./build/libtool.m4 php_gtk.m4 > $@
+ 	
