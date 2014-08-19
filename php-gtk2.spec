@@ -1,37 +1,27 @@
-#define _requires_exceptions pear(EventGenerator.config.php)\\|pear(bugconfig.php)
-
-%define snapshot 20120905
-%define rel 2
-
-%if %{snapshot}
-%define release 0.svn%{snapshot}.%{rel}
-%else
-%define release %{rel}
-%endif
+%define snapshot 20130225
 
 Summary:	GTK+2 toolkit for php
 Name:		php-gtk2
 Version:	2.0.3
-Release:	%{release}
+Release:	0.svn%{snapshot}.3
 Epoch:		2
-Group:		Development/PHP
 License:	LGPLv2.1
-URL:		http://gtk.php.net/
-# Now it's in git: http://git.php.net/?p=php/gtk-src.git
-Source0:	php-gtk2-%{version}-0.svn%{snapshot}.tar.gz
+Group:		Development/PHP
+Url:		http://gtk.php.net/
+Source0:	https://github.com/php/php-gtk-src/php-gtk2-%{version}-0.git%{snapshot}.tar.gz
 Source1:	php_cairo_api.h
-Patch1:		cairo_local_path.patch
-Patch2:		php-gtk2-automake1.13.patch
+Patch0:		cairo_local_path.patch
+Patch1:		php-gtk2-automake1.13.patch
+Patch2:         php-gtk2-2.0.3-fix-php5.5.patch
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(libglade-2.0)
 BuildRequires:	pkgconfig(pango)
 BuildRequires:	php-mbstring
-BuildRequires:	pkgconfig(libglade-2.0) >= 2.4.0
 BuildRequires:	php-cairo
 BuildRequires:	php-cli >= 3:5.3.0
 Requires:	php-cli >= 3:5.3.0
-Conflicts:	apache-mod_php
 
 %description
 PHP-GTK is an extension for PHP programming language that implements language
@@ -41,22 +31,26 @@ GUI applications.
 
 %prep
 %setup -q -n php-gtk2
-%patch1 -p0
+%patch0 -p0
+%patch1 -p1
 %patch2 -p1
 
 cp %{SOURCE1} main/php_cairo_api.h
+
+for i in `find . -type d -name .git`; do
+    if [ -e "$i" ]; then rm -rf $i; fi >&/dev/null
+done
 
 %build
 %serverbuild
 rm -f configure
 rm -rf autom4te.cache
 ./buildconf
-
 %configure2_5x \
     --with-libdir=%{_lib}
 
 # We use our own libtool, and apply some fixes
-%{__rm} libtool
+rm libtool
 ln -s %{_bindir}/libtool libtool
 
 sed -i.orig 's/compile $(CC)/compile --tag=CC $(CC)/g' Makefile
@@ -80,19 +74,8 @@ extension = php_gtk2.so
 
 EOF
 
-%post
-if [ -f /var/lock/subsys/httpd ]; then
-    %{_initrddir}/httpd restart >/dev/null || :
-fi
-
-%postun
-if [ "$1" = "0" ]; then
-    if [ -f /var/lock/subsys/httpd ]; then
-	%{_initrddir}/httpd restart >/dev/null || :
-    fi
-fi
-
 %files
 %doc demos AUTHORS ChangeLog NEWS README* TODO2
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/php.d/*
 %{_libdir}/php/extensions/php_gtk2.so
+
