@@ -22,6 +22,7 @@ BuildRequires:	php-mbstring
 BuildRequires:	php-cairo
 BuildRequires:	php-cli >= 3:5.3.0
 Requires:	php-cli >= 3:5.3.0
+Requires:	php-cairo
 
 %description
 PHP-GTK is an extension for PHP programming language that implements language
