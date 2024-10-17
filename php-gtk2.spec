@@ -7,7 +7,7 @@ Release:	0.svn%{snapshot}.4
 Epoch:		2
 License:	LGPLv2.1
 Group:		Development/PHP
-Url:		http://gtk.php.net/
+Url:		https://gtk.php.net/
 Source0:	https://github.com/php/php-gtk-src/php-gtk2-%{version}-0.git%{snapshot}.tar.gz
 Source1:	php_cairo_api.h
 Patch0:		cairo_local_path.patch
