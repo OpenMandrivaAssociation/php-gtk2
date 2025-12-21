@@ -13,6 +13,11 @@ Source1:	php_cairo_api.h
 Patch0:		cairo_local_path.patch
 Patch1:		php-gtk2-automake1.13.patch
 Patch2:         php-gtk2-2.0.3-fix-php5.5.patch
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	php-devel >= 3:5.2.0
 BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gtk+-2.0)
